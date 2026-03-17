@@ -1,0 +1,374 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      {{ bill.ai_title or (bill.type_acronym + ' ' + bill.number|string + '/' +
+      bill.year|string) }} - Portal de Notícias
+    </title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&family=Merriweather:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    <!-- Navegação / Cabeçalho -->
+    <header class="news-header">
+      <div class="container d-flex align-items-center">
+        <a href="/" class="text-white text-decoration-none me-4">
+          <i class="fa-solid fa-arrow-left fa-lg"></i>
+        </a>
+        <h5 class="mb-0 fw-bold text-white">
+          <i class="fa-solid fa-building-columns me-2"></i> Painel do Eleitor -
+          Portal de Notícias
+        </h5>
+      </div>
+    </header>
+
+    <main class="container">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <!-- Secção de Manchete (Gerada pela IA) -->
+          <article>
+            <!-- Kicker e Título -->
+            <span class="article-kicker"
+              >Proposta Legislativa • {{ bill.type_acronym }} {{ bill.number
+              }}/{{ bill.year }}</span
+            >
+            <h1 class="article-title">
+              {% if bill.ai_title %} {{ bill.ai_title }} {% else %} Proposta de
+              Emenda à Constituição {{ bill.number }}/{{ bill.year }} em análise
+              {% endif %}
+            </h1>
+
+            <!-- Meta Informações (Autor, Data) -->
+            <div
+              class="article-meta d-flex align-items-center justify-content-between flex-wrap w-100 py-3"
+            >
+              <div class="d-flex align-items-center">
+                {% set avatar =
+                "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png"
+                %}
+                <img
+                  src="{{ bill.author_photo_url or avatar }}"
+                  alt="Foto do Autor"
+                  class="author-pic"
+                  onerror="this.onerror=null; this.src='{{ avatar }}';"
+                />
+                <div class="author-details">
+                  <p class="author-name">Por {{ bill.author_name }}</p>
+                  <p class="author-party">
+                    {% if bill.author_party %}
+                    <i class="fa-regular fa-id-badge me-1"></i> {{
+                    bill.author_party }} {% else %}
+                    <i class="fa-regular fa-building me-1"></i> Autor
+                    institucional {% endif %}
+                    <span class="mx-2 d-none d-md-inline">•</span>
+                    <br class="d-md-none" />
+                    <i class="fa-regular fa-clock me-1"></i> Atualizado hoje
+                  </p>
+                </div>
+              </div>
+
+              <div class="w-100 w-md-auto mt-3">
+                <button
+                  class="btn btn-outline-success btn-sm w-100 fw-bold px-4 rounded-pill text-nowrap"
+                  data-bs-toggle="modal"
+                  data-bs-target="#leadModal"
+                  style="
+                    min-height: 40px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                  "
+                >
+                  <i class="fa-solid fa-plus me-2"></i> Acompanhar {{
+                  bill.type_acronym }}
+                </button>
+              </div>
+            </div>
+
+            <!-- Alerta de Status -->
+            <div class="status-box">
+              <i class="fa-solid fa-satellite-dish me-2"></i>
+              <strong>Acompanhamento:</strong> A pauta encontra-se atualmente
+              com o status: <u>{{ bill.status or 'Em tramitação' }}</u>.
+            </div>
+
+            <!-- CORPO DA NOTÍCIA (ARTIGO COMPLETO DA IA FOCADO EM SEO) -->
+            <div class="article-body">
+              {% if bill.ai_article_html %}
+              <!-- O filtro 'safe' diz ao Flask para renderizar o HTML gerado pela IA (h2, p, etc) -->
+              {{ bill.ai_article_html | safe }} {% else %}
+              <p class="article-lead">
+                O nosso sistema de inteligência artificial está atualmente
+                apurando os detalhes e impactos práticos desta pauta. Por favor,
+                volte em alguns minutos para ler a reportagem completa.
+              </p>
+              {% endif %}
+
+              <!-- Separador e Texto Oficial Frio (Bom para SEO de Cauda Longa) -->
+              <hr class="my-5" />
+              <div class="p-4 bg-light rounded">
+                <span class="official-tag text-muted"
+                  ><i class="fa-solid fa-file-signature me-2"></i>Resumo Oficial
+                  Protocolado na Câmara</span
+                >
+                <p class="small text-muted mb-0">{{ bill.summary }}</p>
+              </div>
+            </div>
+          </article>
+
+          <!-- Chamada para Ação (Call to Action) -->
+          <div class="mb-5 pb-5">
+            {% set mostrar_botao = false %} {% set link_autor = '#' %} {% set
+            texto_autor = '' %} {% if 'Senador' in bill.author_name or
+            bill.author_party == 'Senado' %} {% set mostrar_botao = true %} {%
+            set texto_autor = 'Fale com o Senador' %} {% if
+            bill.author_photo_url %} {% set temp_id =
+            bill.author_photo_url.split('/')[-1] | replace('.jpg', '') |
+            replace('.png', '') | replace('senador', '') | replace('SF', '') |
+            trim %} {% if temp_id|int != 0 %} {% set link_autor =
+            'https://www25.senado.leg.br/web/senadores/senador/-/perfil/' ~
+            temp_id %} {% else %} {% set link_autor =
+            'https://www12.senado.leg.br/senadores' %} {% endif %} {% else %} {%
+            set link_autor = 'https://www12.senado.leg.br/senadores' %} {% endif
+            %} {% elif 'Presidência' in bill.author_name or 'Governo' in
+            bill.author_party or 'Executivo' in bill.author_name %} {% set
+            mostrar_botao = false %} {% elif bill.author_party %} {% set
+            mostrar_botao = true %} {% set texto_autor = 'Fale com o Deputado'
+            %} {% if bill.author_photo_url and 'bandep' in bill.author_photo_url
+            %} {% set author_id = bill.author_photo_url.split('/')[-1] |
+            replace('.jpg', '') %} {% set link_autor =
+            'https://www.camara.leg.br/deputados/' ~ author_id %} {% else %} {%
+            set link_autor = 'https://www.camara.leg.br/deputados/quem-sao' %}
+            {% endif %} {% else %} {% set mostrar_botao = false %} {% endif %}
+            {% if mostrar_botao %}
+            <a
+              href="{{ link_autor }}"
+              target="_blank"
+              class="btn-track-big mb-3 text-center d-block text-decoration-none"
+            >
+              <i class="fa-regular fa-comment-dots me-2"></i> {{ texto_autor }}
+            </a>
+            {% endif %}
+
+            <a
+              href="https://www.camara.leg.br/proposicoesWeb/fichadetramitacao?idProposicao={{ bill.id }}"
+              target="_blank"
+              class="btn btn-outline-secondary w-100 py-3 fw-bold"
+            >
+              <i class="fa-solid fa-landmark me-2"></i> Ver documento original
+            </a>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <div
+      class="modal fade"
+      id="leadModal"
+      tabindex="-1"
+      aria-labelledby="leadModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered">
+        <div
+          class="modal-content border-0 shadow-lg"
+          style="border-radius: 16px; overflow: hidden"
+        >
+          <div
+            class="modal-header border-0"
+            style="background-color: #1a252f; color: white"
+          >
+            <h5 class="modal-title fw-bold" id="leadModalLabel">
+              <i class="fa-regular fa-bell me-2" style="color: #27ae60"></i>
+              Acompanhar {{ bill.type_acronym }}
+            </h5>
+            <button
+              type="button"
+              class="btn-close btn-close-white"
+              data-bs-dismiss="modal"
+              aria-label="Fechar"
+            ></button>
+          </div>
+
+          <div class="modal-body p-4 p-md-5 bg-white">
+            <div class="text-center mb-4">
+              <h4
+                class="fw-bold text-dark"
+                style="font-family: &quot;Merriweather&quot;, serif"
+              >
+                Receba atualizações no seu WhatsApp
+              </h4>
+              <p class="text-muted" style="font-size: 0.95rem">
+                Nós avisaremos você automaticamente assim que esta pauta for
+                votada ou sofrer alterações importantes no Congresso.
+              </p>
+            </div>
+
+            <form id="leadForm">
+              <div class="mb-3">
+                <label
+                  for="leadName"
+                  class="form-label fw-bold text-muted"
+                  style="font-size: 0.8rem; letter-spacing: 1px"
+                  >SEU NOME</label
+                >
+                <input
+                  type="text"
+                  class="form-control form-control-lg bg-light border-0"
+                  id="leadName"
+                  placeholder="Como devemos te chamar?"
+                  required
+                />
+              </div>
+              <div class="mb-4">
+                <label
+                  for="leadPhone"
+                  class="form-label fw-bold text-muted"
+                  style="font-size: 0.8rem; letter-spacing: 1px"
+                  >SEU WHATSAPP</label
+                >
+                <input
+                  type="tel"
+                  class="form-control form-control-lg bg-light border-0"
+                  id="leadPhone"
+                  placeholder="(11) 99999-9999"
+                  required
+                />
+              </div>
+
+              <button
+                type="submit"
+                class="btn btn-success btn-lg w-100 fw-bold"
+                style="background-color: #27ae60; border: none"
+              >
+                <i class="fa-brands fa-whatsapp me-2"></i> Quero ser avisado
+              </button>
+            </form>
+          </div>
+
+          <div
+            class="modal-footer justify-content-center border-0"
+            style="background-color: #f8f9fa"
+          >
+            <small class="text-muted" style="font-size: 0.75rem">
+              <i class="fa-solid fa-lock me-1 text-success"></i> Seus dados
+              estão 100% seguros e livres de spam.
+            </small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button
+      id="backToTop"
+      class="btn btn-success shadow-lg"
+      title="Voltar ao topo"
+      style="
+        display: none;
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 9999;
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        border: 2px solid white;
+      "
+    >
+      <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // --- CÓDIGO DO BOTÃO VOLTAR AO TOPO ---
+        const btnTop = document.getElementById("backToTop");
+        window.addEventListener("scroll", function () {
+          let pos =
+            window.pageYOffset ||
+            document.documentElement.scrollTop ||
+            document.body.scrollTop ||
+            0;
+          if (pos > 300) {
+            btnTop.style.setProperty("display", "block", "important");
+          } else {
+            btnTop.style.setProperty("display", "none", "important");
+          }
+        });
+        btnTop.onclick = function () {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        };
+
+        // --- CÓDIGO DO FORMULÁRIO DE LEADS (Mova para dentro do DOMContentLoaded) ---
+        const leadForm = document.getElementById("leadForm");
+        if (leadForm) {
+          leadForm.addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const submitBtn = e.target.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML =
+              '<i class="fa-solid fa-spinner fa-spin me-2"></i> Enviando...';
+
+            const data = {
+              name: document.getElementById("leadName").value,
+              phone: document.getElementById("leadPhone").value,
+              bill_id: "{{ bill.id }}",
+            };
+
+            fetch("/api/subscribe", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(data),
+            })
+              .then((response) => {
+                if (response.status === 404)
+                  throw new Error("Rota não encontrada.");
+                return response.json();
+              })
+              .then((result) => {
+                if (result.success) {
+                  alert("Sucesso! Você será avisado pelo WhatsApp.");
+                  const modal = bootstrap.Modal.getInstance(
+                    document.getElementById("leadModal"),
+                  );
+                  modal.hide();
+                  leadForm.reset();
+                } else {
+                  alert("Erro: " + result.message);
+                }
+              })
+              .catch((error) => {
+                console.error("Erro:", error);
+                alert("Erro ao enviar. Verifique o terminal do Python.");
+              })
+              .finally(() => {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML =
+                  '<i class="fa-brands fa-whatsapp me-2"></i> Quero ser avisado';
+              });
+          });
+        }
+      });
+    </script>
+  </body>
+</html>

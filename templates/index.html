@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Painel do Eleitor</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}"
+    />
+  </head>
+  <body>
+    <header class="main-header">
+      <div class="container d-flex justify-content-between align-items-center">
+        <h4 class="mb-0 fw-bold">
+          <i class="fa-solid fa-landmark me-2"></i>Painel do Eleitor
+        </h4>
+      </div>
+    </header>
+
+    <div class="bg-white border-bottom shadow-sm mb-4 pt-4">
+      <div class="container">
+        <div class="portal-nav-container mb-4">
+          <button
+            class="portal-nav-btn active"
+            id="btn-pec"
+            onclick="filterBills('PEC')"
+          >
+            PEC's
+          </button>
+          <button
+            class="portal-nav-btn"
+            id="btn-pl"
+            onclick="filterBills('URGENCIA')"
+          >
+            PL: URGÊNCIA
+          </button>
+        </div>
+
+        <div class="py-3">
+          <div class="input-group">
+            <span class="input-group-text bg-white border-end-0 text-muted">
+              <i class="fa-solid fa-magnifying-glass"></i>
+            </span>
+            <input
+              type="text"
+              id="searchInput"
+              class="form-control border-start-0 ps-0"
+              placeholder="Buscar por tema ou número da PEC / PL ..."
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <main class="container">
+      <div id="billsContainer" class="row g-4 mb-4"></div>
+
+      <div id="loadingSpinner" class="text-center my-4 d-none">
+        <div class="spinner-border text-success" role="status">
+          <span class="visually-hidden">Carregando...</span>
+        </div>
+      </div>
+
+      <div id="endMessage" class="text-center text-muted my-4 d-none">
+        <p>Você chegou ao fim da lista.</p>
+      </div>
+    </main>
+
+    <script>
+      // 1. Recebe TODAS as pautas direto do Python (O Segredo!)
+      const allBills = {{ bills | tojson | safe }};
+
+      const billsContainer = document.getElementById("billsContainer");
+      const searchInput = document.getElementById("searchInput");
+
+      // Controladores de estado
+      let currentTab = "PEC"; // A tela começa sempre nas PECs
+      let searchQuery = "";
+
+      // 2. FUNÇÃO CENTRAL: Aplica o filtro da Aba e da Pesquisa ao mesmo tempo
+      function applyFilters() {
+        const filteredBills = allBills.filter((bill) => {
+
+          // Regra da Aba
+          const matchTab = (currentTab === "PEC" && bill.type_acronym === "PEC") ||
+                           (currentTab === "URGENCIA" && bill.type_acronym === "PL");
+
+          // Regra da Barra de Pesquisa
+          const searchLower = searchQuery.toLowerCase();
+          const matchSearch = bill.summary.toLowerCase().includes(searchLower) ||
+                              bill.number.toString().includes(searchLower) ||
+                              (bill.ai_title && bill.ai_title.toLowerCase().includes(searchLower));
+
+          return matchTab && matchSearch;
+        });
+
+        // Manda desenhar na tela só o que passou no filtro
+        renderBills(filteredBills);
+      }
+
+      // 3. Gatilho do clique nas Abas (Agora com troca de cor garantida!)
+      function filterBills(type) {
+        currentTab = type;
+
+        // Pega os dois botões no HTML
+        const btnPec = document.getElementById("btn-pec");
+        const btnPl = document.getElementById("btn-pl");
+
+        // Limpa a cor verde de todo mundo
+        if (btnPec) btnPec.classList.remove("active");
+        if (btnPl) btnPl.classList.remove("active");
+
+        // Acende o verde apenas no botão que foi clicado
+        if (type === 'PEC') {
+            if (btnPec) btnPec.classList.add("active");
+        } else if (type === 'URGENCIA') {
+            if (btnPl) btnPl.classList.add("active");
+        }
+
+        // Filtra os cartões na tela
+        applyFilters();
+      }
+
+      // 4. Gatilho de digitação na Barra de Pesquisa
+      searchInput.addEventListener("input", (e) => {
+        searchQuery = e.target.value.trim();
+        applyFilters();
+      });
+
+      // 5. Função de desenhar os cartões na tela
+      function renderBills(bills) {
+        billsContainer.innerHTML = ""; // Limpa a tela
+
+        if (bills.length === 0) {
+            billsContainer.innerHTML = '<div class="col-12 text-center mt-5 text-muted"><i class="fa-solid fa-folder-open fa-3x mb-3"></i><h5>Nenhuma pauta encontrada.</h5></div>';
+            return;
+        }
+
+        bills.forEach((bill) => {
+          const colDiv = document.createElement("div");
+          colDiv.className = "col-12 col-md-6 col-lg-4 mb-4";
+
+          const aiTitle = bill.ai_title || "Analisando impacto da Pauta...";
+          const aiSummary = bill.ai_summary || "Tradução em processamento...";
+          const defaultAvatar = "https://upload.wikimedia.org/wikipedia/commons/8/89/Portrait_Placeholder.png";
+          const photoUrl = bill.author_photo_url || defaultAvatar;
+
+          const partyHtml = bill.author_party ? `<span class="fw-bold text-muted mb-1" style="font-size: 0.75rem; text-transform: uppercase;">${bill.author_party}</span>` : "";
+          const currentStatus = bill.status || "Em tramitação";
+
+          let officialText = bill.summary;
+          if (officialText.length > 180) {
+            officialText = officialText.substring(0, 180) + "...";
+          }
+
+          let summaryBoxHtml = "";
+          if (bill.type_acronym === "PEC") {
+            summaryBoxHtml = `
+              <div class="citizen-summary mt-3">
+                  <div class="citizen-summary-label"><i class="fa-solid fa-language me-1"></i> Entenda a Pauta</div>
+                  <p class="citizen-summary-text">${aiSummary}</p>
+              </div>
+            `;
+          }
+
+          colDiv.innerHTML = `
+            <div class="bill-card h-100 d-flex flex-column justify-content-between">
+                <div>
+                    <div class="author-header align-items-start">
+                        <div class="author-info-wrapper">
+                            <img src="${photoUrl}" alt="Foto do Autor" class="author-photo" onerror="this.onerror=null; this.src='${defaultAvatar}';">
+                            <div class="author-details">
+                                <span class="author-label">Autor</span>
+                                <h6 class="author-name" style="margin-bottom: 0;">${bill.author_name}</h6>
+                            </div>
+                        </div>
+                        <div class="d-flex flex-column align-items-end text-end mt-1">
+                            ${partyHtml}
+                            <span class="badge bg-secondary px-2 py-1">${bill.type_acronym} ${bill.number}/${bill.year}</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <span class="badge text-wrap text-start" style="background-color: #f1c40f; color: #333; font-weight: 600; font-size: 0.75rem; max-width: 100%; line-height: 1.4; padding: 6px 10px;">
+                            <i class="fa-solid fa-map-pin me-1"></i> Status: ${currentStatus}
+                        </span>
+                    </div>
+
+                    <h5 class="ai-generated-title">${aiTitle}</h5>
+                    <p class="official-text mb-0">${officialText}</p>
+
+                    ${summaryBoxHtml}
+                </div>
+
+                <button class="btn-track mt-4 w-100" onclick="window.location.href='/pauta/${bill.id}'">
+                    <i class="fa-regular fa-newspaper me-2"></i>Ver mais...
+                </button>
+            </div>
+          `;
+          billsContainer.appendChild(colDiv);
+        });
+      }
+
+      // 6. Ao carregar a página pela primeira vez, executa o filtro (mostra as PECs)
+      applyFilters();
+    </script>
+  </body>
+</html>

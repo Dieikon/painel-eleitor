@@ -1,0 +1,349 @@
+/* =========================================
+   VARIÁVEIS E GERAL
+   ========================================= */
+:root {
+    --primary-color: #2c3e50;
+    --accent-color: #27ae60;
+    --bg-color: #f8f9fa;
+    --text-color: #333333;
+    --card-bg: #ffffff;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    padding-bottom: 80px;
+}
+
+.main-header {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 20px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* =========================================
+   ESTILOS DA PÁGINA INICIAL (CARDS E ABAS)
+   ========================================= */
+.bill-card {
+    background-color: var(--card-bg);
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 20px;
+    height: 100%; 
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; 
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.official-text {
+    font-size: 0.85rem;
+    color: #7f8c8d;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.citizen-summary {
+    background-color: #f0fdf4;
+    border-left: 4px solid var(--accent-color);
+    padding: 12px;
+    border-radius: 4px 8px 8px 4px;
+    margin-bottom: 20px;
+    flex-grow: 1; 
+}
+
+.citizen-summary-text {
+    font-size: 0.90rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    margin: 0;
+    display: block;
+}
+
+.citizen-summary-label {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--accent-color);
+    margin-bottom: 5px;
+    font-weight: 700;
+}
+
+.author-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.author-info-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.author-photo {
+    width: 65px;  
+    height: 65px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e0e0e0;
+}
+
+.author-details {
+    display: flex;
+    flex-direction: column;
+}
+
+.author-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #7f8c8d;
+    text-transform: uppercase;
+    line-height: 1;
+}
+
+.author-name {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin: 0;
+}
+
+.ai-generated-title {
+    font-size: 1.15rem;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin-bottom: 10px;
+    line-height: 1.3;
+}
+
+/* =========================================
+   ESTILO MENU DE PORTAL (Estilo Globo Rural)
+   ========================================= */
+.portal-nav-container {
+    display: flex;
+    gap: 30px; 
+    border-bottom: 1px solid #e0e0e0; 
+    margin-bottom: 30px;
+}
+
+.portal-nav-btn {
+    background: transparent;
+    border: none;
+    padding: 0 0 12px 0; 
+    font-size: 1.05rem;
+    color: #7f8c8d; 
+    font-weight: 600;
+    transition: all 0.2s ease;
+    border-bottom: 3px solid transparent; 
+    margin-bottom: -1px; 
+}
+
+.portal-nav-btn:hover {
+    color: var(--accent-color); 
+}
+
+.portal-nav-btn.active {
+    color: var(--accent-color); 
+    font-weight: 800; 
+    border-bottom: 3px solid var(--accent-color); 
+}
+
+/* =========================================
+   ESTILOS DA PÁGINA DA NOTÍCIA (bill_detail.html)
+   ========================================= */
+.news-header {
+    background-color: #1a252f;
+    padding: 15px 0;
+    margin-bottom: 40px;
+}
+
+.article-kicker {
+    color: #e74c3c;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.85rem;
+    margin-bottom: 15px;
+    display: inline-block;
+}
+
+.article-title {
+    font-family: "Merriweather", serif;
+    font-size: 2.5rem;
+    font-weight: 800;
+    line-height: 1.2;
+    color: #111;
+    margin-bottom: 20px;
+}
+
+.article-lead {
+    font-size: 1.25rem;
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    font-weight: 400;
+}
+
+.article-meta {
+    display: flex;
+    align-items: center;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    margin-bottom: 40px;
+}
+
+.author-pic {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+    border: 2px solid #ddd;
+}
+
+.author-details p {
+    margin: 0;
+}
+
+.author-party {
+    color: #7f8c8d;
+    font-size: 0.9rem;
+}
+
+.status-box {
+    background-color: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 15px 20px;
+    border-radius: 4px;
+    margin-bottom: 40px;
+    font-weight: 500;
+    color: #856404;
+}
+
+.article-body {
+    font-family: "Merriweather", serif;
+    font-size: 1.1rem;
+    line-height: 1.8;
+    color: #222;
+    background: #fff;
+    padding: 40px; /* Margem perfeita para o Computador */
+    border-radius: 8px;
+    box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+    margin-bottom: 40px;
+}
+
+.official-tag {
+    font-family: "Inter", sans-serif;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    color: #95a5a6;
+    letter-spacing: 1px;
+    margin-bottom: 15px;
+    display: block;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+
+/* Botões Verdes */
+.btn-track, .btn-track-big {
+    background-color: #27ae60;
+    color: white;
+    font-weight: 700;
+    border: none;
+    transition: all 0.3s;
+}
+
+.btn-track {
+    border-radius: 8px;
+    padding: 10px 16px;
+    width: 100%;
+}
+
+.btn-track-big {
+    font-size: 1.2rem;
+    padding: 15px 30px;
+    border-radius: 8px;
+    width: 100%;
+    box-shadow: 0 4px 6px rgba(39, 174, 96, 0.2);
+}
+
+.btn-track:hover, .btn-track-big:hover {
+    background-color: #219653;
+}
+.btn-track-big:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(39, 174, 96, 0.3);
+}
+
+/* =========================================
+   AJUSTES RESPONSIVOS (O SALVADOR DO CELULAR)
+   ========================================= */
+@media (max-width: 768px) {
+    /* 1. Evita que a tela crie barra de rolagem horizontal */
+    body, html {
+        overflow-x: hidden;
+    }
+
+    /* 2. Remove as margens laterais automáticas do Bootstrap */
+    .container {
+        padding-left: 10px !important;
+        padding-right: 10px !important;
+    }
+
+    /* 3. A SUA REGRA MESTRA: padding superior 40, laterais 15, inferior 50 */
+    .article-body {
+        padding: 20px 15px 0px 15px !important; 
+        font-size: 1.05rem !important;
+    }
+    
+    /* 4. Tira o avanço gigante da lista (bolinhas) */
+    .article-body ul {
+        padding-left: 20px !important;
+    }
+
+    /* 5. Ajusta o título gigante e as tags h2 */
+    .article-title {
+        font-size: 1.6rem !important;
+    }
+    .article-body h2 {
+        font-size: 1.4rem !important;
+        margin-top: 1.5rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    /* 6. Garante que a foto do autor e o texto continuam lado a lado */
+    .article-meta {
+        flex-direction: row !important;
+    }
+}
+
+/* Botão Voltar ao Topo */
+#backToTop {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  display: none; 
+  z-index: 9999 !important; /* Aumentamos para garantir visibilidade */
+  width: 50px; /* Um pouquinho maior para facilitar o clique no celular */
+  height: 50px;
+  border-radius: 50%;
+  border: none;
+  background-color: #27ae60;
+  color: white;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2); /* Sombra para destacar do fundo branco */
+  transition: all 0.3s;
+}
+
+#backToTop:hover {
+  transform: scale(1.1); /* Dá um leve aumento ao passar o mouse */
+  background-color: #219653;
+}
+
