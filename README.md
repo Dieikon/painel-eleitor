@@ -1,94 +1,80 @@
-#English
-🏛️ Voter Panel - Legislative News Portal
-Voter Panel (Painel do Eleitor) is a web platform that transforms complex legislative agendas (PECs and PLs) into accessible news using Artificial Intelligence. The system also allows citizens to follow specific topics via WhatsApp.
+# 🏛️ Voter Panel (Painel do Eleitor)
+> **Transforming complex legislative agendas into accessible news through AI.**
 
-🚀 Features
-**Automatic Monitoring**: Captures real-time data from the Chamber of Deputies and Senate APIs.
-**Journalistic AI**: Uses Google Gemini to rewrite technical terms into easy-to-read articles.
-**Smart Filter**: Search by theme or bill number with Infinite Scroll.
-**Lead Capture**: Registration system for updates via WhatsApp.
-**Admin Dashboard**: Management of contacts and user interests.
+The **Voter Panel** is a web platform designed to bridge the gap between the legislative branch and the citizen. It converts technical and complex bills (PECs and PLs) into readable journalistic articles using Google Gemini AI. Additionally, it features a notification system for users to follow specific topics via WhatsApp.
 
-🛠️ Technologies Used
+---
 
-**Backend**: Python 3.11 + Flask
-**Database**: SQLite3
-**Frontend**: Bootstrap 5, FontAwesome, and JavaScript (Vanilla)
-**AI**: Google Gemini API (via Generative AI SDK)
-**Integration**: Brazilian Chamber of Deputies Open Data API
+## 🚀 Key Features
 
+* **📡 Real-Time Monitoring**: Automated data ingestion from the Brazilian Chamber of Deputies and Senate APIs.
+* **🤖 AI-Powered Journalism**: Leverages the **Google Gemini API** to translate "legalese" into clear, accessible language.
+* **🔍 Smart Discovery**: Search for specific bills by theme or number with a seamless **Infinite Scroll** interface.
+* **📱 WhatsApp Integration**: Lead capture system allowing citizens to subscribe to updates on specific legislative topics.
+* **🛡️ Admin Dashboard**: Secure area for managing contacts, user interests, and system insights.
 
-## 📸 System Demonstration
+---
+
+## 🛠️ Tech Stack
+
+| Layer | Technologies |
+| :--- | :--- |
+| **Backend** | ![Python](https://img.shields.io/badge/python-3670A0?style=flat&logo=python&logoColor=ffdd54) **Python 3.11** + Flask |
+| **Database** | ![SQLite](https://img.shields.io/badge/sqlite-%2307405e.svg?style=flat&logo=sqlite&logoColor=white) **SQLite3** |
+| **Frontend** | ![Bootstrap](https://img.shields.io/badge/bootstrap-%238511FA.svg?style=flat&logo=bootstrap&logoColor=white) **Bootstrap 5**, FontAwesome, Vanilla JS |
+| **Artificial Intelligence** | ![Gemini](https://img.shields.io/badge/Google_Gemini-8E75B2?style=flat&logo=googlegemini&logoColor=white) **Google Gemini SDK** |
+| **Data Source** | **Câmara dos Deputados** (Open Data API) |
+
+---
+
+## 📸 System Showcase
 
 <p align="center">
-<img width="1920" height="987" alt="Image" src="https://github.com/user-attachments/assets/ace23d1e-e9ef-4ae9-923f-fb5cf5564dad" />
-
-<img width="1920" height="886" alt="Image" src="https://github.com/user-attachments/assets/00e0f5fa-50b5-4a96-868b-7984f426ee98" />
-
-<img width="1920" height="884" alt="Image" src="https://github.com/user-attachments/assets/1c1f19c8-f370-4971-932b-0c3befb28eec" />
-
-<img width="1920" height="884" alt="Image" src="https://github.com/user-attachments/assets/6fb7fbd6-6ac2-4bca-93d2-2d9c3c092267" />
-
-<img width="1920" height="918" alt="Image" src="https://github.com/user-attachments/assets/c3179d26-b0c6-48d6-ba88-ea5c01cb1699" />
+  <img width="100%" alt="Dashboard Overview" src="https://github.com/user-attachments/assets/ace23d1e-e9ef-4ae9-923f-fb5cf5564dad" />
 </p>
 
-📦 Installation
-Clone the repository:
+<div align="center">
+  <img width="49%" alt="Detail View 1" src="https://github.com/user-attachments/assets/00e0f5fa-50b5-4a96-868b-7984f426ee98" />
+  <img width="49%" alt="Detail View 2" src="https://github.com/user-attachments/assets/1c1f19c8-f370-4971-932b-0c3befb28eec" />
+</div>
 
-Bash
-git clone https://github.com/your-username/voter-panel.git
-Create and activate the virtual environment (Python 3.11):
+<div align="center">
+  <img width="49%" alt="Admin Panel" src="https://github.com/user-attachments/assets/6fb7fbd6-6ac2-4bca-93d2-2d9c3c092267" />
+  <img width="49%" alt="Lead Capture" src="https://github.com/user-attachments/assets/c3179d26-b0c6-48d6-ba88-ea5c01cb1699" />
+</div>
 
-Bash
+---
+
+## 📦 Installation & Setup
+
+Follow these steps to get the project running locally:
+
+### 1. Clone the repository
+```bash
+git clone [https://github.com/your-username/voter-panel.git](https://github.com/your-username/voter-panel.git)
+cd voter-panel
+
+2. Environment Setup
+Create a virtual environment using Python 3.11:
 python -m venv venv
-# On Windows:
+
+# Activate on Windows:
 source venv/Scripts/activate 
-# On Linux/Mac:
+
+# Activate on Linux/Mac:
 source venv/bin/activate
-Install dependencies:
 
-Bash
+3. Install Dependencies
 pip install -r requirements.txt
-Configure API Key:
-Create an environment variable or edit the fetch script with your Gemini API key.
 
-Initialize Database and Data:
+4. Configure API Keys
+Create a .env file or export your Gemini API key:
+export GEMINI_API_KEY="your_api_key_here"
 
-Bash
+5. Initialize Database & Fetch Data
 python database.py
 python fetch_data.py
-Run the project:
 
-Bash
+6. Launch Application
 python app.py
 
-
-📦 Installation
-Clone the repository:
-
-Bash
-git clone https://github.com/your-username/painel-eleitor.git
-Create and activate the virtual environment (Python 3.11):
-
-Bash
-python -m venv venv
-# On Windows:
-source venv/Scripts/activate 
-# On Linux/Mac:
-source venv/bin/activate
-Install dependencies:
-
-Bash
-pip install -r requirements.txt
-Configure API Key:
-Create an environment variable or edit the fetch script with your Gemini API key.
-
-Initialize Database and Data:
-
-Bash
-python database.py
-python fetch_data.py
-Run the project:
-
-Bash
-python app.py
