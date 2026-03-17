@@ -1,24 +1,24 @@
-# 🏛️ Painel do Eleitor - Portal de Notícias Legislativas
+#English
+🏛️ Voter Panel - Legislative News Portal
+Voter Panel (Painel do Eleitor) is a web platform that transforms complex legislative agendas (PECs and PLs) into accessible news using Artificial Intelligence. The system also allows citizens to follow specific topics via WhatsApp.
 
-O **Painel do Eleitor** é uma plataforma web que transforma pautas legislativas complexas (PECs e PLs) em notícias acessíveis utilizando Inteligência Artificial. O sistema também permite que cidadãos acompanhem pautas específicas via WhatsApp.
+🚀 Features
+**Automatic Monitoring**: Captures real-time data from the Chamber of Deputies and Senate APIs.
+**Journalistic AI**: Uses Google Gemini to rewrite technical terms into easy-to-read articles.
+**Smart Filter**: Search by theme or bill number with Infinite Scroll.
+**Lead Capture**: Registration system for updates via WhatsApp.
+**Admin Dashboard**: Management of contacts and user interests.
 
-## 🚀 Funcionalidades
+🛠️ Technologies Used
 
-- **Monitoramento Automático**: Captura dados reais da API da Câmara e do Senado.
-- **IA Jornalística**: Utiliza o Google Gemini para reescrever eixos técnicos em artigos fáceis de ler.
-- **Filtro Inteligente**: Busca por tema ou número da pauta com Scroll Infinito.
-- **Captura de Leads**: Sistema de cadastro para acompanhamento via WhatsApp.
-- **Painel Administrativo**: Gestão de contatos e interesses dos usuários.
+**Backend**: Python 3.11 + Flask
+**Database**: SQLite3
+**Frontend**: Bootstrap 5, FontAwesome, and JavaScript (Vanilla)
+**AI**: Google Gemini API (via Generative AI SDK)
+**Integration**: Brazilian Chamber of Deputies Open Data API
 
-## 🛠️ Tecnologias Utilizadas
 
-- **Backend**: Python 3.11 + Flask
-- **Banco de Dados**: SQLite3
-- **Frontend**: Bootstrap 5, FontAwesome e JavaScript (Vanilla)
-- **IA**: Google Gemini API (via Generative AI SDK)
-- **Integração**: API de Dados Abertos da Câmara dos Deputados
-
-## 📸 Demonstração do Sistema
+## 📸 System Demonstration
 
 <p align="center">
 <img width="1920" height="987" alt="Image" src="https://github.com/user-attachments/assets/ace23d1e-e9ef-4ae9-923f-fb5cf5564dad" />
@@ -32,28 +32,63 @@ O **Painel do Eleitor** é uma plataforma web que transforma pautas legislativas
 <img width="1920" height="918" alt="Image" src="https://github.com/user-attachments/assets/c3179d26-b0c6-48d6-ba88-ea5c01cb1699" />
 </p>
 
-## 📦 Como instalar
+📦 Installation
+Clone the repository:
 
-1. **Clonar o repositório**:
+Bash
+git clone https://github.com/your-username/voter-panel.git
+Create and activate the virtual environment (Python 3.11):
 
-   ```bash
-   git clone [https://github.com/seu-usuario/painel-eleitor.git](https://github.com/seu-usuario/painel-eleitor.git)
+Bash
+python -m venv venv
+# On Windows:
+source venv/Scripts/activate 
+# On Linux/Mac:
+source venv/bin/activate
+Install dependencies:
 
-   ```
+Bash
+pip install -r requirements.txt
+Configure API Key:
+Create an environment variable or edit the fetch script with your Gemini API key.
 
-2. **Criar e ativar o ambiente virtual (Python 3.11)**:
-   python -m venv venv
-   source venv/scripts/activate # No Windows
+Initialize Database and Data:
 
-3. **Instalar as dependências**:
-   pip install -r requirements.txt
+Bash
+python database.py
+python fetch_data.py
+Run the project:
 
-4. **Configurar a API Key**:
-   Crie uma variável de ambiente ou edite o script de fetch com sua chave do Gemini.
+Bash
+python app.py
 
-5. **Instalar as dependências**:
-   python database.py
-   python fetch_data.py
 
-6. **Rodar o projeto**:
-   python app.py
+📦 Installation
+Clone the repository:
+
+Bash
+git clone https://github.com/your-username/painel-eleitor.git
+Create and activate the virtual environment (Python 3.11):
+
+Bash
+python -m venv venv
+# On Windows:
+source venv/Scripts/activate 
+# On Linux/Mac:
+source venv/bin/activate
+Install dependencies:
+
+Bash
+pip install -r requirements.txt
+Configure API Key:
+Create an environment variable or edit the fetch script with your Gemini API key.
+
+Initialize Database and Data:
+
+Bash
+python database.py
+python fetch_data.py
+Run the project:
+
+Bash
+python app.py
